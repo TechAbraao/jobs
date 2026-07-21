@@ -1,5 +1,5 @@
 from jobs.utils.types import JobType, TYPE_MAP
-from jobs.utils.api import GupyAPI
+from jobs.utils.providers import GupyAPI
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
@@ -16,16 +16,26 @@ def main():
 
 @app.command()
 def search(
-    city: str = typer.Option("", "--city", "-c", help="Filtra vagas por cidade."),
+    city: str = typer.Option(None, "--city", "-c", help="Filtra vagas por cidade."),
     limit: int = typer.Option(10, "--limit", "-l", help="Quantidade de resultados."),
-    keyword: str = typer.Option("", "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
-    state: str = typer.Option("", "--state", "-s", help="Filtra vagas por estado."),
+    keyword: str = typer.Option(None, "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
+    state: str = typer.Option(None, "--state", "-s", help="Filtra vagas por estado."),
     type: JobType = typer.Option(JobType.efetivo, "--type", "-t", help="Tipo de vaga a ser filtrada."),
     output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/)."),
+    enterprise: str = typer.Option(None, "--enterprise", "-e", help="Filtra vagas por empresa."),
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-    data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword, state=state)
+    filters = {"limit": limit, "type": type_employee}
+    if city:
+        filters["city"] = city
+    if keyword:
+        filters["keyword"] = keyword
+    if state:
+        filters["state"] = state
+    if enterprise:
+        filters["enterprise"] = enterprise
+    data = api.search_jobs(**filters)
     all_jobs = data["data"]
 
     table = Table()

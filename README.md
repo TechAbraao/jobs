@@ -34,12 +34,12 @@ jobs-cli search [OPTIONS]
 
 | Opção | Atalho | Tipo | Padrão | Descrição |
 |---|---|---|---|---|
-| `--city` | `-c` | `str` | `N/A` | Filtra vagas por cidade. |
+| `--city` | `-c` | `str` | `None` | Filtra vagas por cidade. |
 | `--limit` | `-l` | `int` | `10` | Quantidade de resultados retornados. |
-| `--keyword` | `-k` | `str` | `N/A` | Palavra-chave para buscar no título e na descrição das vagas. |
+| `--keyword` | `-k` | `str` | `None` | Palavra-chave para buscar no título e na descrição das vagas. |
 | `--type` | `-t` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
-| `--state` | `-s` | `str` | `N/A` | Filtra vagas por estado. |
-| `--output` | `-o` | `str` | `N/A` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`). |
+| `--state` | `-s` | `str` | `None` | Filtra vagas por estado. |
+| `--output` | `-o` | `str` | `None` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`). |
 - Busca padrão (vagas em São Paulo)
 
 ```bash
@@ -107,6 +107,34 @@ $ jobs-cli search -s "São Paulo" -c "São Paulo" -l 5 -t "Efetivo"
 └────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────┴───────────┴───────────┴────────────┴────────────────────────┘
 ```
 
+- Busca usando filtro da empresa
+```bash
+$ jobs-cli search -e "Safra" -l 15
+```
+
+- Exemplo de retorno:
+
+```bash
+┏━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Empresa ┃ Cargo                                                                                       ┃ Cidade         ┃ Estado       ┃ URL        ┃ Publicado em           ┃
+┡━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ Safra   │ Riscos  Mercado & Operacional                                                               │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-20 às 18:01:28 │
+│ Safra   │ Analista de Projetos de Cobrança - Sênior                                                   │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-17 às 19:32:21 │
+│ Safra   │ Especialista - Jurídico Asset                                                               │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-10 às 12:18:25 │
+│ Safra   │ Analista de CRM Sr - CRM                                                                    │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-08 às 20:57:55 │
+│ Safra   │ Distribuição de Investimentos | Investor Advisor - Empresas                                 │ S�o Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-07 às 19:10:55 │
+│ Safra   │ Analista Middle Office | Asset                                                              │ S�o Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-07 às 18:36:38 │
+│ Safra   │ Especialista em data science                                                                │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-07 às 12:58:42 │
+│ Safra   │ Operador de Computador – Turno III (23h15 às 07h00) - Vaga exclusiva PCD                    │ S�o Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-03 às 15:08:00 │
+│ Safra   │ Analista de Suporte Jr - Vaga exclusiva PCD                                                 │ S�o Paulo      │ São Paulo    │ Abrir Vaga │ 2026-07-01 às 18:55:13 │
+│ Safra   │ Especialista Comercial (Hunter) | Consignado Privado | Safra Financeira (Belo Horizonte/MG) │ Belo Horizonte │ Minas Gerais │ Abrir Vaga │ 2026-06-29 às 13:00:16 │
+│ Safra   │ Especialista Comercial (Hunter) | Consignado Privado | Safra Financeira (Recife/PE)         │ Recife         │ Pernambuco   │ Abrir Vaga │ 2026-06-29 às 12:55:28 │
+│ Safra   │ Especialista Comercial (Hunter) | Consignado Privado | Safra Financeira (Curitiba/PR)       │ Curitiba       │ Paraná       │ Abrir Vaga │ 2026-06-29 às 12:51:50 │
+│ Safra   │ Executivo Vendas Cartorio                                                                   │ São Paulo      │ São Paulo    │ Abrir Vaga │ 2026-06-26 às 18:57:59 │
+│ Safra   │ Executivo de Contas Safrapay - RJ (Capital e Niterói)                                       │                │              │ Abrir Vaga │ 2026-06-23 às 18:10:06 │
+│ Safra   │ Executivo de Contas Safrapay - MG (Belo Horizonte, Juiz de Fora e Uberlândia)               │                │              │ Abrir Vaga │ 2026-06-23 às 18:04:28 │
+└─────────┴─────────────────────────────────────────────────────────────────────────────────────────────┴────────────────┴──────────────┴────────────┴────────────────────────┘
+```
 
 ## 2. Executando localmente
 ### 2.1. Pré-requisitos
@@ -150,18 +178,18 @@ Com o ambiente ativado, o comando `jobs-cli` fica disponível no terminal:
 $ jobs-cli search --help
 ```
 
-```bash
-                                                                                                                                                                                                                                              
+```bash                                                                         
  Usage: jobs-cli search [OPTIONS]                                                                                                                                                                                                             
                                                                                                                                                                                                                                               
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --city     -c      <str>                             Filtra vagas por cidade.                                                                                                                                                              │
-│ --limit    -l      <int>                             Quantidade de resultados. [default: 10]                                                                                                                                               │
-│ --keyword  -k      <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                                                                         │
-│ --state    -s      <str>                             Filtra vagas por estado.                                                                                                                                                              │
-│ --type     -t      <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                                                                       │
-│ --output   -o      <str>                             Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/).                                                                                                                 │
-│ --help                                               Show this message and exit.                                                                                                                                                           │
+│ --city        -c      <str>                             Filtra vagas por cidade.                                                                                                                                                           │
+│ --limit       -l      <int>                             Quantidade de resultados. [default: 10]                                                                                                                                            │
+│ --keyword     -k      <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                                                                      │
+│ --state       -s      <str>                             Filtra vagas por estado.                                                                                                                                                           │
+│ --type        -t      <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                                                                    │
+│ --output      -o      <str>                             Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/).                                                                                                              │
+│ --enterprise  -e      <str>                             Filtra vagas por empresa.                                                                                                                                                          │
+│ --help                                                  Show this message and exit.                                                                                                                                                        │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 

@@ -1,6 +1,6 @@
 from typer.testing import CliRunner
 from jobs.cli import app
-from jobs.utils.api import GupyAPI
+from jobs.utils.providers import GupyAPI
 
 runner = CliRunner()
 
@@ -11,7 +11,9 @@ def test_search_returns_job(mocker):
                 "careerPageName": "Acme Corp",
                 "name": "Python Developr",
                 "city": "São Paulo",
+                "state": "São Paulo",
                 "jobUrl": "https://example.com/employee/1",
+                "publishedDate": "2023-01-01T00:00:00Z"
             }
         ]
     }

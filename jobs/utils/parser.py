@@ -10,6 +10,7 @@ def parse_jobs(data):
                 company=item["careerPageName"],
                 city=item["addressCity"],
                 state=item["addressStateShortName"],
+                published_at=item["publishedDate"],
                 url=item["jobUrl"]
             )
         )

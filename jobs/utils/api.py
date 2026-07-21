@@ -9,6 +9,7 @@ class GupyAPI:
                     limit: int, 
                     type: str, 
                     keyword: str,
+                    state: str,
                     page: int = 1
                     ):
         
@@ -16,6 +17,7 @@ class GupyAPI:
             f"{self._BASE_URL}/jobs",
             params={
                 "city": city,
+                "state": state,
                 "limit": limit,
                 "type": type,
                 "term": keyword

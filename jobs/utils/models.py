@@ -7,4 +7,5 @@ class Job:
     company: str
     city: str
     state: str
+    published_at: str
     url: str

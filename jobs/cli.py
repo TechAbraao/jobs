@@ -2,6 +2,7 @@ from jobs.utils.types import JobType, TYPE_MAP
 from jobs.utils.api import GupyAPI
 from rich.console import Console
 from rich.table import Table
+from datetime import datetime
 from pathlib import Path
 import typer
 
@@ -15,29 +16,41 @@ def main():
 
 @app.command()
 def search(
-    city: str = typer.Option("São Paulo", "--city", "-c", help="Filtra vagas por cidade."),
+    city: str = typer.Option("", "--city", "-c", help="Filtra vagas por cidade."),
     limit: int = typer.Option(10, "--limit", "-l", help="Quantidade de resultados."),
     keyword: str = typer.Option("", "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
+    state: str = typer.Option("", "--state", "-s", help="Filtra vagas por estado."),
     type: JobType = typer.Option(JobType.efetivo, "--type", "-t", help="Tipo de vaga a ser filtrada."),
     output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/)."),
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-    data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword)
+    data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword, state=state)
     all_jobs = data["data"]
 
     table = Table()
     table.add_column("Empresa")
     table.add_column("Cargo")
     table.add_column("Cidade")
+    table.add_column("Estado")
     table.add_column("URL")
+    table.add_column("Publicado em")
 
     for job in all_jobs:
+        raw_date = job.get("publishedDate")
+        if raw_date:
+            published = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
+            data_formatada = published.strftime("%Y-%m-%d às %H:%M:%S")
+        else:
+            data_formatada = "N/A"
+
         table.add_row(
             job["careerPageName"],
             job["name"],
             job["city"],
-            f"[link={job['jobUrl']}]Abrir Vaga[/link]"
+            job["state"],
+            f"[link={job['jobUrl']}]Abrir Vaga[/link]",
+            data_formatada,
         )
     console.print(table)
     

@@ -12,11 +12,24 @@ def main():
     pass
 
 @app.command()
-def search(city: str = "São Paulo", limit: int = 10):
-
+def search(
+        city: str = typer.Option("São Paulo", "--city", help="Filtra vagas por cidade."),
+        limit: int = typer.Option(10, "--limit", help="Quantidade de cesultados."),
+        keyword: str = typer.Option("Tecnologia", "--keyword", help="Palavra-chave para buscar no título e na descrição das vagas."),
+        type: str = typer.Option("Efetivo","--type", help="Tipo de vaga a ser filtrada. Opções: Efetivo, Estagiário, Jovem Aprendiz.")
+    ):
+    type_employee = None
+    
     api = GupyAPI()
 
-    data = api.search_jobs(city, limit)
+    if type == "Efetivo":
+        type_employee = "vacancy_type_effective"
+    elif type == "Estágio":
+        type_employee = "vacancy_type_internship"
+    elif type == "Jovem Aprendiz":
+        type_employee = "vacancy_type_apprentice"
+    
+    data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword)
 
     table = Table()
 
@@ -30,7 +43,7 @@ def search(city: str = "São Paulo", limit: int = 10):
             job["careerPageName"],
             job["name"],
             job["city"],
-            job["jobUrl"]
+            f"[link={job['jobUrl']}]Abrir Vaga[/link]"
         )
 
     console.print(table)

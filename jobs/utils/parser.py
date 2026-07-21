@@ -15,3 +15,12 @@ def parse_jobs(data):
             )
         )
     return jobs
+
+from pathlib import Path
+
+def load_keywords(path: Path) -> list[str]:
+    return [
+        line.strip().lower()
+        for line in path.read_text(encoding="utf8").splitlines()
+        if line.strip() and not line.startswith("#")
+    ]

@@ -25,7 +25,7 @@
 ### 1.3. Documentação
 #### 1.3.1. Comando `search`
 
-Busca vagas de emprego na plataforma Gupy com filtros de cidade, tipo de contrato e palavra-chave.
+- Busca vagas de emprego na plataforma Gupy com filtros de cidade, tipo de contrato e palavra-chave.
 
 ```bash
 jobs-cli search [OPTIONS]
@@ -137,6 +137,69 @@ $ jobs-cli search -e "Safra" -l 15
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────┴────────────────┴──────────────┴────────────┴────────────────────────┘
 ```
 
+#### 1.3.2. Comando `match` (beta)
+- Busca vagas de emprego na plataforma Gupy utilizando os filtros disponíveis e calcula a porcentagem de compatibilidade de cada vaga com as palavras-chave definidas pelo usuário no arquivo `KEYWORDS.md`.
+
+```bash
+$ jobs-cli match [OPTIONS]
+```
+
+- Para utilizar o comando `match`, renomeie o arquivo `KEYWORDS_TEMPLATE.md` para `KEYWORDS.md`. O arquivo está localizado na raiz do projeto e deve permanecer nesse diretório. Em seguida, preencha-o com as palavras-chave que representam seus conhecimentos, tecnologias ou competências de interesse. Utilize o modelo abaixo como referência:
+
+```text
+Python
+Java
+Flask
+FastAPI
+Spring Boot
+AWS
+Amazon Web Services
+Docker
+Linux
+Bash Script
+```
+
+##### 1.3.2.1. Tabela
+
+| Opção | Atalho | Tipo | Padrão | Descrição |
+|---|---|---|---|---|
+| `--file` | `-f` | `KeywordsType` | `KEYWORDS.md` | Arquivo de palavras-chave. |
+| `--city` | `-c` | `str` | `None` | Filtra vagas por cidade. |
+| `--limit` | `-l` | `int` | `15` | Quantidade de resultados retornados. |
+| `--keyword` | `-k` | `str` | `None` | Palavra-chave para buscar no título e na descrição das vagas. |
+| `--state` | `-s` | `str` | `None` | Filtra vagas por estado. |
+| `--enterprise` | `-e` | `str` | `None` | Filtra vagas por empresa. |
+
+- Busca vagas em São Paulo pela palavra-chave `Java` com cálculo de compatibilidade.
+
+```bash
+$ jobs-cli match -f KEYWORDS.md -s "São Paulo" -l 15 -k "Java"
+```
+
+- Exemplo de retorno
+
+```bash
+┏━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Porcentual ┃ Empresa                       ┃ Cargo                                                                  ┃ Cidade          ┃ Estado    ┃ URL        ┃ Palavras                              ┃
+┡━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 50%        │ PagBank                       │ Engenheiro de Software Jr. (Java)                                      │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot, aws, docker, linux │
+│ 50%        │ PagBank                       │ Engenheiro de Software Sr. (Java)                                      │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot, aws, docker, linux │
+│ 50%        │ Firedev IT                    │ SkillHunter - Desenvolvedor Java com React                             │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot, aws, docker, linux │
+│ 40%        │ VENHA SER #SANGUELARANJA 🧡🚀 │  Pessoa Desenvolvedor(a) Java / Microsserviços - Pleno                 │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot, aws, docker        │
+│ 40%        │ Porto                         │ Pessoa Desenvolvedora Java Pleno                                       │ São Paulo       │ São Paulo │ Abrir Vaga │ python, java, spring boot, aws        │
+│ 30%        │ PagBank                       │ Engenheiro de Software Sr. (Java)                                      │ Sao Paulo       │ São Paulo │ Abrir Vaga │ java, aws, docker                     │
+│ 30%        │ PagBank                       │ Engenheiro de Software Sr. (Java)                                      │ Sao Paulo       │ São Paulo │ Abrir Vaga │ java, aws, docker                     │
+│ 30%        │ Brasilprev                    │ ANALISTA DE SISTEMAS JAVA PLENO                                        │ São Paulo       │ São Paulo │ Abrir Vaga │ python, java, aws                     │
+│ 30%        │ Minsait an Indra Company      │ Desenvolvedor Java Fullstack com Angular Pleno                         │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot, docker             │
+│ 30%        │ Itaú Unibanco                 │ Engenharia de Software Fullstack Pleno - Java/Angular | Recuperação PF │ São Paulo       │ São Paulo │ Abrir Vaga │ java, aws, docker                     │
+│ 20%        │ Minsait an Indra Company      │ Desenvolvedor Java Backend Pleno                                       │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot                     │
+│ 20%        │ Minsait an Indra Company      │ Desenvolvedor Java Backend Pleno                                       │ São Paulo       │ São Paulo │ Abrir Vaga │ java, spring boot                     │
+│ 20%        │ PagBank                       │ Engenheiro de Software Pl. (Java)                                      │ Sao Paulo       │ São Paulo │ Abrir Vaga │ java, aws                             │
+│ 20%        │ PagBank                       │ Engenheiro de Software Sr. (Java)                                      │ Sao Paulo       │ São Paulo │ Abrir Vaga │ java, aws                             │
+│ 10%        │ ADMINISTRADOR DE REDES        │ Analista Desenvolvedor Java Pl                                         │ Taboão da Serra │ São Paulo │ Abrir Vaga │ java                                  │
+└────────────┴───────────────────────────────┴────────────────────────────────────────────────────────────────────────┴─────────────────┴───────────┴────────────┴───────────────────────────────────────┘
+```
+
 ## 2. Executando localmente
 ### 2.1. Pré-requisitos
 - [Python 3.10+](https://www.python.org/downloads/)
@@ -173,13 +236,33 @@ $ make install
 
 ### 2.3. Utilização
 
-Com o ambiente ativado, o comando `jobs-cli` fica disponível no terminal:
+- Com o ambiente ativado, o comando `jobs-cli` fica disponível no terminal:
+
+```bash
+$ jobs-cli --help
+```
+
+```bash                                                                                                                                
+ Usage: jobs-cli [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                  
+                                                                                                                                                                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                                                                                                                                    │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                                                                                             │
+│ --help                        Show this message and exit.                                                                                                                                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ match                                                                                                                                                                                                                                      │
+│ search                                                                                                                                                                                                                                     │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
+
+- Comandos disponíveis em `search`
 
 ```bash
 $ jobs-cli search --help
 ```
 
-```bash                                                                         
+```bash
  Usage: jobs-cli search [OPTIONS]                                                                                                                                                                                                             
                                                                                                                                                                                                                                               
 ╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
@@ -194,6 +277,22 @@ $ jobs-cli search --help
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-Veja a seção [1.3.1. Comando `search`](#131-comando-search) para todas as opções disponíveis.
+- Comandos disponíveis em `match`
 
+```bash
+$ jobs-cli match --help
+```
 
+```bash
+ Usage: jobs-cli match [OPTIONS]                                                                                                                                                                                                              
+                                                                                                                                                                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --file        -f      <KEYWORDS.md>  Arquivo de palavras-chave. [default: KEYWORDS.md]                                                                                                                                                     │
+│ --keyword     -k      <str>          Palavra-chave para buscar no título e na descrição das vagas.                                                                                                                                         │
+│ --limit       -l      <int>          Quantidade de resultados. [default: 15]                                                                                                                                                               │
+│ --enterprise  -e      <str>          Filtra vagas por empresa.                                                                                                                                                                             │
+│ --state       -s      <str>          Filtra vagas por estado.                                                                                                                                                                              │
+│ --city        -c      <str>          Filtra vagas por cidade.                                                                                                                                                                              │
+│ --help                               Show this message and exit.                                                                                                                                                                           │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```

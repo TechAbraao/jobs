@@ -1,9 +1,11 @@
-from jobs.utils.types import JobType, TYPE_MAP
+from jobs.utils.types import JobType, TYPE_MAP, KeywordsType
+from jobs.utils.matcher import calculate_match
 from jobs.utils.providers import GupyAPI
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
 from pathlib import Path
+from jobs.utils.parser import load_keywords
 import typer
 
 app = typer.Typer()
@@ -14,6 +16,73 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 def main():
     pass
 
+@app.command()
+def match(
+    file: KeywordsType = typer.Option(KeywordsType.keywords, "--file", "-f", help="Arquivo de palavras-chave."),
+    keyword: str = typer.Option(None, "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
+    limit: int = typer.Option(15, "--limit", "-l", help="Quantidade de resultados."),
+    enterprise: str = typer.Option(None, "--enterprise", "-e", help="Filtra vagas por empresa."),
+    state: str = typer.Option(None, "--state", "-s", help="Filtra vagas por estado."),
+    city: str = typer.Option(None, "--city", "-c", help="Filtra vagas por cidade."),
+):
+    path = Path(file.value)
+    keywords = load_keywords(path)
+        
+    api = GupyAPI()
+    filters = {"limit": limit}
+    
+    if keyword:
+        filters["keyword"] = keyword
+    if enterprise:
+        filters["enterprise"] = enterprise
+    if city:
+        filters["city"] = city
+    if state:
+        filters["state"] = state    
+        
+    data = api.search_jobs(**filters)
+    jobs = data["data"]
+    results = []
+    
+    for job in jobs:
+        score, found = calculate_match(job, keywords)
+        results.append({
+            "score": score,
+            "found": found,
+            "job": job,
+        })
+    
+    results.sort(
+        key=lambda item: item["score"],
+        reverse=True,
+    )
+    
+    table = Table()
+
+    table.add_column("Porcentual")
+    table.add_column("Empresa")
+    table.add_column("Cargo")
+    table.add_column("Cidade")
+    table.add_column("Estado")
+    table.add_column("URL")
+    table.add_column("Palavras")
+    
+    for result in results:
+
+        job = result["job"]
+
+        table.add_row(
+        f"{result['score']:.0f}%",
+        job["careerPageName"],
+        job["name"],
+        job["city"],
+        job["state"],
+        f"[link={job['jobUrl']}]Abrir Vaga[/link]",
+        ", ".join(result["found"]),
+        )
+
+    console.print(table)
+    
 @app.command()
 def search(
     city: str = typer.Option(None, "--city", "-c", help="Filtra vagas por cidade."),
@@ -50,9 +119,9 @@ def search(
         raw_date = job.get("publishedDate")
         if raw_date:
             published = datetime.fromisoformat(raw_date.replace("Z", "+00:00"))
-            data_formatada = published.strftime("%Y-%m-%d às %H:%M:%S")
+            format_date = published.strftime("%Y-%m-%d às %H:%M:%S")
         else:
-            data_formatada = "N/A"
+            format_date = "N/A"
 
         table.add_row(
             job["careerPageName"],
@@ -60,7 +129,7 @@ def search(
             job["city"],
             job["state"],
             f"[link={job['jobUrl']}]Abrir Vaga[/link]",
-            data_formatada,
+            format_date,
         )
     console.print(table)
     
@@ -98,7 +167,6 @@ def _save_to_txt(jobs: list[dict], filename: str) -> Path:
     file_path = DATA_DIR / filename
     file_path.write_text(content, encoding="utf-8")
     return file_path
-
 
 if __name__ == "__main__":
     app()

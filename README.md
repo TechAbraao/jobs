@@ -40,6 +40,7 @@ jobs-cli search [OPTIONS]
 | `--type` | `-t` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
 | `--state` | `-s` | `str` | `None` | Filtra vagas por estado. |
 | `--output` | `-o` | `str` | `None` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`). |
+| `--enterprise` | `-e` | `str` | `None` | Filtra vagas por empresa. |
 - Busca padrão (vagas em São Paulo)
 
 ```bash

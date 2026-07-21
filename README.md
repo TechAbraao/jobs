@@ -118,7 +118,7 @@ $ make install
 Com o ambiente ativado, o comando `jobs-cli` fica disponível no terminal:
 
 ```bash
-$ jobs-cli search jobs-cli search --help
+$ jobs-cli search --help
 ```
 
 ```bash

@@ -4,6 +4,9 @@ class JobType(str, Enum):
     efetivo = "Efetivo"
     estagiario = "Estágio"
     jovem_aprendiz = "Jovem Aprendiz"
+
+class KeywordsType(str, Enum):
+    keywords = "KEYWORDS.md"
     
 TYPE_MAP = {
     JobType.efetivo: "vacancy_type_effective",

@@ -20,6 +20,7 @@
 - Httpx
 - Typer
 - Rich
+- Pytest
 
 ### 1.3. Documentação
 #### 1.3.1. Comando `search`
@@ -35,7 +36,7 @@ jobs-cli search [OPTIONS]
 |---|---|---|---|
 | `--city` | `str` | `São Paulo` | Filtra vagas por cidade. |
 | `--limit` | `int` | `10` | Quantidade de resultados retornados. |
-| `--keyword` | `str` | `` | Palavra-chave para buscar no título e na descrição das vagas. |
+| `--keyword` | `str` | `N/A` | Palavra-chave para buscar no título e na descrição das vagas. |
 | `--type` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
 
 - Busca padrão (vagas em São Paulo)
@@ -89,27 +90,27 @@ $ jobs-cli search --city="Rio de Janeiro" --type="Estágio"
 - Clone o repositório:
 
 ```bash
-git clone git@github.com:TechAbraao/jobs.git
-cd jobs
+$ git clone git@github.com:TechAbraao/jobs.git
+$ cd jobs
 ```
 
 - Crie e ative um ambiente virtual:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # Linux/Mac
+$ python -m venv .venv
+$ source .venv/bin/activate  # Linux/Mac
 ```
 
 - Instale o projeto (via `pip`):
 
 ```bash
-pip install -e .
+$ pip install -e .
 ```
 
 - Ou via `Makefile`:
 
 ```bash
-make install
+$ make install
 ```
 
 ### 2.3. Utilização
@@ -117,7 +118,19 @@ make install
 Com o ambiente ativado, o comando `jobs-cli` fica disponível no terminal:
 
 ```bash
-jobs-cli search
+$ jobs-cli search jobs-cli search --help
+```
+
+```bash
+Usage: jobs-cli search [OPTIONS]                                                                                                                                                             
+                                                                                                                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --city           <str>                             Filtra vagas por cidade. [default: São Paulo]                                                                                           │
+│ --limit          <int>                             Quantidade de resultados. [default: 10]                                                                                                 │
+│ --keyword        <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                           │
+│ --type           <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                         │
+│ --help                                             Show this message and exit.                                                                                                             │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 Veja a seção [1.3.1. Comando `search`](#131-comando-search) para todas as opções disponíveis.

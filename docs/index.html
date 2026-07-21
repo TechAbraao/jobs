@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>jobs-cli — Exemplos</title>
+<title>jobs-cli</title>
 <style>
   :root {
     --bg: #ffffff;
@@ -137,11 +137,10 @@
 <div class="wrap">
 
   <h1>jobs-cli</h1>
-  <p class="subtitle">Exemplos de uso do comando <code>search</code> — CLI para buscar vagas na Gupy direto do terminal.</p>
+  <p class="subtitle">Exemplos de uso do comando <code>search</code> (CLI para buscar vagas na Gupy direto do terminal).</p>
   <p class="ref">Opções disponíveis: <code>--city</code>, <code>--limit</code>, <code>--keyword</code>, <code>--type</code> · veja a <a href="#referencia">tabela completa</a> no fim da página.</p>
 
   <h2>Busca básica</h2>
-  <p class="section-note">Sem argumentos, usa os padrões: São Paulo, Tecnologia, tipo Efetivo, 10 resultados.</p>
 
   <h3>Busca padrão</h3>
   <pre><code>jobs-cli search</code></pre>
@@ -173,41 +172,38 @@
   <h3>Estágio</h3>
   <pre><code>jobs-cli search --type="Estágio"</code></pre>
 
-  <h3>Estagiário (grafia alternativa aceita)</h3>
-  <pre><code>jobs-cli search --type="Estagiário"</code></pre>
-
   <h3>Jovem Aprendiz</h3>
   <pre><code>jobs-cli search --type="Jovem Aprendiz"</code></pre>
 
-  <h3>Efetivo, explícito</h3>
+  <h3>Efetivo</h3>
   <pre><code>jobs-cli search --type="Efetivo"</code></pre>
 
 
   <h2>Por palavra-chave</h2>
 
   <h3>Vagas de dados</h3>
-  <pre><code>jobs-cli search --keyword="dados"</code></pre>
+  <pre><code>jobs-cli search --keyword="Dados"</code></pre>
 
   <h3>Vagas de suporte</h3>
-  <pre><code>jobs-cli search --keyword="suporte"</code></pre>
+  <pre><code>jobs-cli search --keyword="Suporte"</code></pre>
 
   <h3>Vagas de design</h3>
-  <pre><code>jobs-cli search --keyword="design"</code></pre>
+  <pre><code>jobs-cli search --keyword="Design"</code></pre>
 
   <h3>Cargo específico</h3>
-  <pre><code>jobs-cli search --keyword="desenvolvedor python"</code></pre>
+  <pre><code>jobs-cli search --keyword="Desenvolvedor Python"</code></pre>
 
 
   <h2>Combinando filtros</h2>
 
   <h3>Estágio em tecnologia no Rio de Janeiro</h3>
-  <pre><code>jobs-cli search --city="Rio de Janeiro" --type="Estágio" --keyword="tecnologia"</code></pre>
+  <pre><code>jobs-cli search --city="Rio de Janeiro" --type="Estágio" --keyword="Tecnologia"</code></pre>
 
   <h3>Jovem aprendiz em São Paulo, poucos resultados</h3>
   <pre><code>jobs-cli search --type="Jovem Aprendiz" --limit=5</code></pre>
 
   <h3>Vagas de dados efetivas em Belo Horizonte</h3>
-  <pre><code>jobs-cli search --city="Belo Horizonte" --keyword="dados" --type="Efetivo" --limit=15</code></pre>
+  <pre><code>jobs-cli search --city="Belo Horizonte" --keyword="Dados" --type="Efetivo" --limit=15</code></pre>
 
 
   <h2>Erros comuns</h2>
@@ -238,7 +234,7 @@
         <td>Quantidade de resultados retornados.</td>
       </tr>
       <tr>
-        <td><code>--keyword</code></td><td>str</td><td>Tecnologia</td>
+        <td><code>--keyword</code></td><td>str</td><td>N/A</td>
         <td>Palavra-chave para buscar no título e na descrição das vagas.</td>
       </tr>
       <tr>

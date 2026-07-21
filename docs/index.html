@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jobs-cli — Exemplos</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a1a;
+    --muted: #666666;
+    --line: #e2e2e2;
+    --code-bg: #f5f5f5;
+    --accent: #2f6f4f;
+    --error: #b23a2e;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 56px 20px 80px;
+  }
+
+  h1 {
+    font-size: 32px;
+    margin: 0 0 8px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+
+  .ref {
+    font-size: 14px;
+    margin: 0 0 40px;
+  }
+  .ref a { color: var(--accent); }
+
+  h2 {
+    font-size: 20px;
+    margin: 48px 0 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .section-note {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 8px 0 20px;
+  }
+
+  h3 {
+    font-size: 15px;
+    margin: 24px 0 6px;
+  }
+
+  .desc {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 8px;
+  }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 2px 5px;
+    border-radius: 3px;
+  }
+
+  pre {
+    background: var(--code-bg);
+    padding: 12px 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 0 0 4px;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  pre.error {
+    background: #fbecea;
+  }
+  pre.error code {
+    color: var(--error);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 8px 0 16px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  a { color: var(--accent); }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>jobs-cli</h1>
+  <p class="subtitle">Exemplos de uso do comando <code>search</code> — CLI para buscar vagas na Gupy direto do terminal.</p>
+  <p class="ref">Opções disponíveis: <code>--city</code>, <code>--limit</code>, <code>--keyword</code>, <code>--type</code> · veja a <a href="#referencia">tabela completa</a> no fim da página.</p>
+
+  <h2>Busca básica</h2>
+  <p class="section-note">Sem argumentos, usa os padrões: São Paulo, Tecnologia, tipo Efetivo, 10 resultados.</p>
+
+  <h3>Busca padrão</h3>
+  <pre><code>jobs-cli search</code></pre>
+
+  <h3>Trazer mais resultados</h3>
+  <pre><code>jobs-cli search --limit=30</code></pre>
+
+  <h3>Trazer só o essencial</h3>
+  <pre><code>jobs-cli search --limit=3</code></pre>
+
+
+  <h2>Por cidade</h2>
+
+  <h3>Rio de Janeiro</h3>
+  <pre><code>jobs-cli search --city="Rio de Janeiro"</code></pre>
+
+  <h3>Belo Horizonte</h3>
+  <pre><code>jobs-cli search --city="Belo Horizonte"</code></pre>
+
+  <h3>Recife</h3>
+  <pre><code>jobs-cli search --city="Recife"</code></pre>
+
+  <h3>Porto Alegre, com mais resultados</h3>
+  <pre><code>jobs-cli search --city="Porto Alegre" --limit=20</code></pre>
+
+
+  <h2>Por tipo de vaga</h2>
+
+  <h3>Estágio</h3>
+  <pre><code>jobs-cli search --type="Estágio"</code></pre>
+
+  <h3>Estagiário (grafia alternativa aceita)</h3>
+  <pre><code>jobs-cli search --type="Estagiário"</code></pre>
+
+  <h3>Jovem Aprendiz</h3>
+  <pre><code>jobs-cli search --type="Jovem Aprendiz"</code></pre>
+
+  <h3>Efetivo, explícito</h3>
+  <pre><code>jobs-cli search --type="Efetivo"</code></pre>
+
+
+  <h2>Por palavra-chave</h2>
+
+  <h3>Vagas de dados</h3>
+  <pre><code>jobs-cli search --keyword="dados"</code></pre>
+
+  <h3>Vagas de suporte</h3>
+  <pre><code>jobs-cli search --keyword="suporte"</code></pre>
+
+  <h3>Vagas de design</h3>
+  <pre><code>jobs-cli search --keyword="design"</code></pre>
+
+  <h3>Cargo específico</h3>
+  <pre><code>jobs-cli search --keyword="desenvolvedor python"</code></pre>
+
+
+  <h2>Combinando filtros</h2>
+
+  <h3>Estágio em tecnologia no Rio de Janeiro</h3>
+  <pre><code>jobs-cli search --city="Rio de Janeiro" --type="Estágio" --keyword="tecnologia"</code></pre>
+
+  <h3>Jovem aprendiz em São Paulo, poucos resultados</h3>
+  <pre><code>jobs-cli search --type="Jovem Aprendiz" --limit=5</code></pre>
+
+  <h3>Vagas de dados efetivas em Belo Horizonte</h3>
+  <pre><code>jobs-cli search --city="Belo Horizonte" --keyword="dados" --type="Efetivo" --limit=15</code></pre>
+
+
+  <h2>Erros comuns</h2>
+  <p class="section-note">O <code>--type</code> valida o valor antes de rodar a busca.</p>
+
+  <h3>Tipo inválido</h3>
+  <pre><code>jobs-cli search --type="CLT"</code></pre>
+  <pre class="error"><code>Error: Invalid value for '--type': 'CLT' is not one of 'Efetivo', 'Estágio', 'Estagiário', 'Jovem Aprendiz'.</code></pre>
+
+  <h3>Cidade com espaço, sem aspas</h3>
+  <pre><code>jobs-cli search --city=São Paulo</code></pre>
+  <pre class="error"><code>Error: Got unexpected extra argument (Paulo)</code></pre>
+  <p class="desc">Sempre envolva nomes com espaço em aspas: <code>--city="São Paulo"</code>.</p>
+
+
+  <h2 id="referencia">Referência de opções</h2>
+  <table>
+    <thead>
+      <tr><th>Opção</th><th>Tipo</th><th>Padrão</th><th>Descrição</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>--city</code></td><td>str</td><td>São Paulo</td>
+        <td>Filtra vagas por cidade.</td>
+      </tr>
+      <tr>
+        <td><code>--limit</code></td><td>int</td><td>10</td>
+        <td>Quantidade de resultados retornados.</td>
+      </tr>
+      <tr>
+        <td><code>--keyword</code></td><td>str</td><td>Tecnologia</td>
+        <td>Palavra-chave para buscar no título e na descrição das vagas.</td>
+      </tr>
+      <tr>
+        <td><code>--type</code></td><td>str</td><td>Efetivo</td>
+        <td>Tipo de vaga: Efetivo, Estágio / Estagiário, Jovem Aprendiz.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    jobs-cli · projeto acadêmico e open-source ·
+    <a href="https://github.com/TechAbraao/jobs">github.com/TechAbraao/jobs</a>
+  </footer>
+
+</div>
+</body>
+</html>

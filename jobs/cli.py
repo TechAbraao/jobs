@@ -1,8 +1,27 @@
 import typer
 from rich.console import Console
 from rich.table import Table
+from enum import Enum
 
-from jobs.functions.api import GupyAPI
+from jobs.utils.api import GupyAPI
+
+class JobType(str, Enum):
+    efetivo = "Efetivo"
+    estagiario = "Estágio"
+    jovem_aprendiz = "Jovem Aprendiz"
+    
+TYPE_MAP = {
+    JobType.efetivo: "vacancy_type_effective",
+    JobType.estagiario: "vacancy_type_internship",
+    JobType.jovem_aprendiz: "vacancy_type_apprentice",
+}
+
+TYPE_MAP = {
+    JobType.efetivo: "vacancy_type_effective",
+    JobType.estagiario: "vacancy_type_internship",
+    JobType.jovem_aprendiz: "vacancy_type_apprentice",
+}
+
 
 app = typer.Typer()
 console = Console()
@@ -13,31 +32,22 @@ def main():
 
 @app.command()
 def search(
-        city: str = typer.Option("São Paulo", "--city", help="Filtra vagas por cidade."),
-        limit: int = typer.Option(10, "--limit", help="Quantidade de cesultados."),
-        keyword: str = typer.Option("Tecnologia", "--keyword", help="Palavra-chave para buscar no título e na descrição das vagas."),
-        type: str = typer.Option("Efetivo","--type", help="Tipo de vaga a ser filtrada. Opções: Efetivo, Estagiário, Jovem Aprendiz.")
-    ):
-    type_employee = None
-    
+    city: str = typer.Option("São Paulo", "--city", help="Filtra vagas por cidade."),
+    limit: int = typer.Option(10, "--limit", help="Quantidade de resultados."),
+    keyword: str = typer.Option("", "--keyword", help="Palavra-chave para buscar no título e na descrição das vagas."),
+    type: JobType = typer.Option(JobType.efetivo, "--type", help="Tipo de vaga a ser filtrada."),
+):
     api = GupyAPI()
+    type_employee = TYPE_MAP[type]
 
-    if type == "Efetivo":
-        type_employee = "vacancy_type_effective"
-    elif type == "Estágio":
-        type_employee = "vacancy_type_internship"
-    elif type == "Jovem Aprendiz":
-        type_employee = "vacancy_type_apprentice"
-    
     data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword)
 
     table = Table()
-
     table.add_column("Empresa")
     table.add_column("Cargo")
     table.add_column("Cidade")
     table.add_column("URL")
-    
+
     for job in data["data"]:
         table.add_row(
             job["careerPageName"],
@@ -47,7 +57,6 @@ def search(
         )
 
     console.print(table)
-
 
 if __name__ == "__main__":
     app()

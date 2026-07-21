@@ -1,4 +1,4 @@
-from jobs.functions.models import Job
+from jobs.utils.models import Job
 
 def parse_jobs(data):
     jobs = []

@@ -41,7 +41,7 @@ jobs-cli search [OPTIONS]
 | `--state` | `-s` | `str` | `None` | Filtra vagas por estado. |
 | `--output` | `-o` | `str` | `None` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`). |
 | `--enterprise` | `-e` | `str` | `None` | Filtra vagas por empresa. |
-- Busca padrão (vagas em São Paulo)
+- Busca padrão
 
 ```bash
 $ jobs-cli search

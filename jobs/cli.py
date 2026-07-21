@@ -12,11 +12,11 @@ def main():
     pass
 
 @app.command()
-def search(keyword: str):
+def search(city: str = "São Paulo", limit: int = 10):
 
     api = GupyAPI()
 
-    data = api.search_jobs(keyword)
+    data = api.search_jobs(city, limit)
 
     table = Table()
 
@@ -29,7 +29,7 @@ def search(keyword: str):
         table.add_row(
             job["careerPageName"],
             job["name"],
-            job["country"],
+            job["city"],
             job["jobUrl"]
         )
 

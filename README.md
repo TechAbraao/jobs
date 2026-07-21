@@ -32,13 +32,13 @@ jobs-cli search [OPTIONS]
 ```
 ##### 1.3.1.1. Tabela
 
-| Opção | Tipo | Padrão | Descrição |
-|---|---|---|---|
-| `--city` | `str` | `São Paulo` | Filtra vagas por cidade. |
-| `--limit` | `int` | `10` | Quantidade de resultados retornados. |
-| `--keyword` | `str` | `N/A` | Palavra-chave para buscar no título e na descrição das vagas. |
-| `--type` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
-
+| Opção | Atalho | Tipo | Padrão | Descrição |
+|---|---|---|---|---|
+| `--city` | `-c` | `str` | `São Paulo` | Filtra vagas por cidade. |
+| `--limit` | `-l` | `int` | `10` | Quantidade de resultados retornados. |
+| `--keyword` | `-k` | `str` | `N/A` | Palavra-chave para buscar no título e na descrição das vagas. |
+| `--type` | `-t` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
+| `--output` | `-o` | `str` | `N/A` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`, com data e hora adicionadas ao nome). |
 - Busca padrão (vagas em São Paulo)
 
 ```bash
@@ -122,15 +122,16 @@ $ jobs-cli search --help
 ```
 
 ```bash
-Usage: jobs-cli search [OPTIONS]                                                                                                                                                             
-                                                                                                                                                                                              
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --city           <str>                             Filtra vagas por cidade. [default: São Paulo]                                                                                           │
-│ --limit          <int>                             Quantidade de resultados. [default: 10]                                                                                                 │
-│ --keyword        <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                           │
-│ --type           <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                         │
-│ --help                                             Show this message and exit.                                                                                                             │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ Usage: jobs-cli search [OPTIONS]                                                                                                                                                                                                             
+                                                                                                                                                                                                                                              
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --city     -c      <str>                             Filtra vagas por cidade. [default: São Paulo]                                                                                                                                         │
+│ --limit    -l      <int>                             Quantidade de resultados. [default: 10]                                                                                                                                               │
+│ --keyword  -k      <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                                                                         │
+│ --type     -t      <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                                                                       │
+│ --output   -o      <str>                             Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/).                                                                                                                 │
+│ --help                                               Show this message and exit.                                                                                                                                                           │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 Veja a seção [1.3.1. Comando `search`](#131-comando-search) para todas as opções disponíveis.

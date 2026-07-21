@@ -1,30 +1,13 @@
-import typer
+from jobs.utils.types import JobType, TYPE_MAP
+from jobs.utils.api import GupyAPI
 from rich.console import Console
 from rich.table import Table
-from enum import Enum
-
-from jobs.utils.api import GupyAPI
-
-class JobType(str, Enum):
-    efetivo = "Efetivo"
-    estagiario = "Estágio"
-    jovem_aprendiz = "Jovem Aprendiz"
-    
-TYPE_MAP = {
-    JobType.efetivo: "vacancy_type_effective",
-    JobType.estagiario: "vacancy_type_internship",
-    JobType.jovem_aprendiz: "vacancy_type_apprentice",
-}
-
-TYPE_MAP = {
-    JobType.efetivo: "vacancy_type_effective",
-    JobType.estagiario: "vacancy_type_internship",
-    JobType.jovem_aprendiz: "vacancy_type_apprentice",
-}
-
+from pathlib import Path
+import typer
 
 app = typer.Typer()
 console = Console()
+DATA_DIR = Path(__file__).resolve().parent / "data"
 
 @app.callback()
 def main():
@@ -32,15 +15,16 @@ def main():
 
 @app.command()
 def search(
-    city: str = typer.Option("São Paulo", "--city", help="Filtra vagas por cidade."),
-    limit: int = typer.Option(10, "--limit", help="Quantidade de resultados."),
-    keyword: str = typer.Option("", "--keyword", help="Palavra-chave para buscar no título e na descrição das vagas."),
-    type: JobType = typer.Option(JobType.efetivo, "--type", help="Tipo de vaga a ser filtrada."),
+    city: str = typer.Option("São Paulo", "--city", "-c", help="Filtra vagas por cidade."),
+    limit: int = typer.Option(10, "--limit", "-l", help="Quantidade de resultados."),
+    keyword: str = typer.Option("", "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
+    type: JobType = typer.Option(JobType.efetivo, "--type", "-t", help="Tipo de vaga a ser filtrada."),
+    output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/)."),
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-
     data = api.search_jobs(city=city, limit=limit, type=type_employee, keyword=keyword)
+    all_jobs = data["data"]
 
     table = Table()
     table.add_column("Empresa")
@@ -48,15 +32,50 @@ def search(
     table.add_column("Cidade")
     table.add_column("URL")
 
-    for job in data["data"]:
+    for job in all_jobs:
         table.add_row(
             job["careerPageName"],
             job["name"],
             job["city"],
             f"[link={job['jobUrl']}]Abrir Vaga[/link]"
         )
-
     console.print(table)
+    
+    if output:
+        saved_path = _save_to_txt(all_jobs, output)
+        tableOutput = Table()
+
+        tableOutput.add_column("Descrição")
+        tableOutput.add_column("Caminho Relativo")
+        tableOutput.add_column("Arquivo")
+
+        tableOutput.add_row(
+            "Resultados salvos com sucesso",
+            str(saved_path.relative_to(Path.cwd())) if saved_path.is_relative_to(Path.cwd()) else str(saved_path),
+            saved_path.name,
+        )
+
+        console.print(tableOutput)
+
+def _save_to_txt(jobs: list[dict], filename: str) -> Path:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    lines = []
+    for job in jobs:
+        lines.append(
+            f"Empresa: {job['careerPageName']}\n"
+            f"Cargo: {job['name']}\n"
+            f"Cidade: {job['city']}\n"
+            f"URL: {job['jobUrl']}\n"
+            + "-" * 40
+        )
+
+    content = "\n".join(lines) if lines else "Nenhuma vaga encontrada."
+
+    file_path = DATA_DIR / filename
+    file_path.write_text(content, encoding="utf-8")
+    return file_path
+
 
 if __name__ == "__main__":
     app()

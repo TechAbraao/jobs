@@ -1,11 +1,8 @@
 from jobs.functions.models import Job
 
 def parse_jobs(data):
-
     jobs = []
-
     for item in data["data"]:
-
         jobs.append(
             Job(
                 id=item["id"],
@@ -16,5 +13,4 @@ def parse_jobs(data):
                 url=item["jobUrl"]
             )
         )
-
     return jobs

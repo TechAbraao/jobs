@@ -1,4 +1,3 @@
-
 from typing import Optional
 import httpx
 
@@ -36,5 +35,24 @@ class GupyAPI:
         response.raise_for_status()
         return response.json()
     
-    def applying_filters(self):
-        pass
+    def applying_filters(
+            self, 
+            limit: int,
+            type_employee: str,
+            city: str,
+            keyword: str,
+            state: str,
+            enterprise: str
+        ):
+        filters = {"limit": limit, "type": type_employee}
+        
+        if city:
+            filters["city"] = city
+        if keyword:
+            filters["keyword"] = keyword
+        if state:
+            filters["state"] = state
+        if enterprise:
+            filters["enterprise"] = enterprise
+            
+        return filters

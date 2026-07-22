@@ -121,16 +121,7 @@ def search(
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-    filters = {"limit": limit, "type": type_employee}
-    
-    if city:
-        filters["city"] = city
-    if keyword:
-        filters["keyword"] = keyword
-    if state:
-        filters["state"] = state
-    if enterprise:
-        filters["enterprise"] = enterprise
+    filters = api.applying_filters(limit=limit, type_employee=type_employee, city=city, keyword=keyword, state=state, enterprise=enterprise)
         
     with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
         data = api.search_jobs(**filters)
@@ -138,12 +129,9 @@ def search(
     all_jobs = data["data"]
     
     table = Table()
-    table.add_column("Empresa")
-    table.add_column("Cargo")
-    table.add_column("Cidade")
-    table.add_column("Estado")
-    table.add_column("URL")
-    table.add_column("Publicado em")
+    columns = ["Empresa", "Cargo", "Cidade", "Estado", "URL", "Publicado em"]
+    for column in columns:
+        table.add_column(column)
 
     for job in all_jobs:
         raw_date = job.get("publishedDate")
@@ -170,10 +158,10 @@ def search(
         saved_path = _save_to_txt(all_jobs, output)
         tableOutput = Table()
 
-        tableOutput.add_column("Descrição")
-        tableOutput.add_column("Caminho Relativo")
-        tableOutput.add_column("Arquivo")
-
+        columns_output = ["Descrição", "Caminho Relativo", "Arquivo"]
+        for column in columns_output:
+            tableOutput.add_column(column)
+            
         tableOutput.add_row(
             "Resultados salvos com sucesso",
             str(saved_path.relative_to(Path.cwd())) if saved_path.is_relative_to(Path.cwd()) else str(saved_path),

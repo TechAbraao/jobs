@@ -35,3 +35,6 @@ class GupyAPI:
         )
         response.raise_for_status()
         return response.json()
+    
+    def applying_filters(self):
+        pass

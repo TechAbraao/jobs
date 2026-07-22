@@ -60,8 +60,10 @@ def match(
         filters["city"] = city
     if state:
         filters["state"] = state    
-        
-    data = api.search_jobs(**filters)
+    
+    with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
+        data = api.search_jobs(**filters)
+    
     jobs = data["data"]
     results = []
     
@@ -129,9 +131,12 @@ def search(
         filters["state"] = state
     if enterprise:
         filters["enterprise"] = enterprise
-    data = api.search_jobs(**filters)
+        
+    with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
+        data = api.search_jobs(**filters)
+    
     all_jobs = data["data"]
-
+    
     table = Table()
     table.add_column("Empresa")
     table.add_column("Cargo")

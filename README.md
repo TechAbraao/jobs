@@ -200,6 +200,10 @@ $ jobs-cli match -f KEYWORDS.md -s "São Paulo" -l 15 -k "Java"
 └────────────┴───────────────────────────────┴────────────────────────────────────────────────────────────────────────┴─────────────────┴───────────┴────────────┴───────────────────────────────────────┘
 ```
 
+#### 1.3.3. Comando `history` 
+
+- Permite visualizar o histórico de comandos utilizados, com a opção de limitar a quantidade exibida.
+
 ## 2. Executando localmente
 ### 2.1. Pré-requisitos
 - [Python 3.10+](https://www.python.org/downloads/)

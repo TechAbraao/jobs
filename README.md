@@ -137,7 +137,7 @@ $ jobs-cli search -e "Safra" -l 15
 └─────────┴─────────────────────────────────────────────────────────────────────────────────────────────┴────────────────┴──────────────┴────────────┴────────────────────────┘
 ```
 
-#### 1.3.2. Comando `match` (beta)
+#### 1.3.2. Comando `match`
 - Busca vagas de emprego na plataforma Gupy utilizando os filtros disponíveis e calcula a porcentagem de compatibilidade de cada vaga com as palavras-chave definidas pelo usuário no arquivo `KEYWORDS.md`.
 
 ```bash
@@ -200,6 +200,40 @@ $ jobs-cli match -f KEYWORDS.md -s "São Paulo" -l 15 -k "Java"
 └────────────┴───────────────────────────────┴────────────────────────────────────────────────────────────────────────┴─────────────────┴───────────┴────────────┴───────────────────────────────────────┘
 ```
 
+#### 1.3.3. Comando `history` 
+
+- Permite visualizar o histórico de comandos utilizados, com a opção de limitar a quantidade exibida.
+
+```bash
+$ jobs-cli history [OPTIONS]
+```
+
+##### 1.3.3.1. Tabela
+| Opção | Atalho | Tipo | Padrão | Descrição |
+|---|---|---|---|---|
+| `--limit` | `-l` | `int` | `10` | Quantidade de resultados retornados. |
+
+- Histórico de comandos
+
+```bash
+$ jobs-cli history
+```
+
+- Exemplo de retorno:
+
+```bash
+┏━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Data e Hora         ┃ Comando                                                     ┃
+┡━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ 2026-07-28 20:35:20 │ jobs-cli match -f KEYWORDS.md -s 'São Paulo' -l 5 -k Python │
+│ 2026-07-28 20:33:09 │ jobs-cli match -f KEYWORDS.md -s 'São Paulo' -l 15 -k Java  │
+│ 2026-07-28 20:31:54 │ jobs-cli search -l 10 -k Python                             │
+│ 2026-07-28 20:28:07 │ jobs-cli search -l 10 -k Python                             │
+│ 2026-07-28 20:27:20 │ jobs-cli search -l 10                                       │
+└─────────────────────┴─────────────────────────────────────────────────────────────┘
+```
+
+
 ## 2. Executando localmente
 ### 2.1. Pré-requisitos
 - [Python 3.10+](https://www.python.org/downloads/)
@@ -218,7 +252,7 @@ $ cd jobs
 - Crie e ative um ambiente virtual:
 
 ```bash
-$ python -m venv .venv
+$ python3 -m venv .venv
 $ source .venv/bin/activate  # Linux/Mac
 ```
 
@@ -243,17 +277,18 @@ $ jobs-cli --help
 ```
 
 ```bash                                                                                                                                
- Usage: jobs-cli [OPTIONS] COMMAND [ARGS]...                                                                                                                                                                                                  
-                                                                                                                                                                                                                                              
-╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --install-completion          Install completion for the current shell.                                                                                                                                                                    │
-│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                                                                                             │
-│ --help                        Show this message and exit.                                                                                                                                                                                  │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ match                                                                                                                                                                                                                                      │
-│ search                                                                                                                                                                                                                                     │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ Usage: jobs-cli [OPTIONS] COMMAND [ARGS]...
+
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                                                                                  │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                                                                           │
+│ --help                        Show this message and exit.                                                                                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ history                                                                                                                                                                                  │
+│ match                                                                                                                                                                                    │
+│ search                                                                                                                                                                                   │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 - Comandos disponíveis em `search`
@@ -295,4 +330,19 @@ $ jobs-cli match --help
 │ --city        -c      <str>          Filtra vagas por cidade.                                                                                                                                                                              │
 │ --help                               Show this message and exit.                                                                                                                                                                           │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+```
+
+- Comandos disponíveis em `history`
+
+```bash
+$ jobs-cli history --help
+```
+
+```bash
+ Usage: jobs-cli history [OPTIONS]
+
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --limit  -l      <int>  Número de comandos a exibir [default: 10]                                                                  │
+│ --help                  Show this message and exit.                                                                                │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 ```

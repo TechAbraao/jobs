@@ -1,12 +1,16 @@
+from jobs.utils.history import create_tables, save_history, all_commands
 from jobs.utils.types import JobType, TYPE_MAP, KeywordsType
+from jobs.utils.history import create_tables
+from jobs.utils.parser import load_keywords
 from jobs.utils.matcher import calculate_match
 from jobs.utils.providers import GupyAPI
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
 from pathlib import Path
-from jobs.utils.parser import load_keywords
+import shlex
 import typer
+import sys
 
 app = typer.Typer()
 console = Console()
@@ -14,7 +18,24 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 
 @app.callback()
 def main():
-    pass
+    create_tables()
+
+@app.command()
+def history(limit: int = typer.Option(10, "--limit", "-l", help="Número de comandos a exibir")):
+    commands = all_commands()
+
+    if not commands:
+        console.print("[yellow]Nenhum comando no histórico ainda.[/yellow]")
+        return
+
+    table = Table()
+    table.add_column("Data e Hora", style="cyan", no_wrap=True)
+    table.add_column("Comando", style="white")
+
+    for command, created_at in commands[-limit:]:
+        table.add_row(str(created_at), command)
+
+    console.print(table)
 
 @app.command()
 def match(
@@ -39,8 +60,10 @@ def match(
         filters["city"] = city
     if state:
         filters["state"] = state    
-        
-    data = api.search_jobs(**filters)
+    
+    with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
+        data = api.search_jobs(**filters)
+    
     jobs = data["data"]
     results = []
     
@@ -66,6 +89,9 @@ def match(
     table.add_column("Estado")
     table.add_column("URL")
     table.add_column("Palavras")
+    
+    command = "jobs-cli " + " ".join(shlex.quote(arg) for arg in sys.argv[1:])
+    save_history(command)
     
     for result in results:
 
@@ -95,25 +121,17 @@ def search(
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-    filters = {"limit": limit, "type": type_employee}
-    if city:
-        filters["city"] = city
-    if keyword:
-        filters["keyword"] = keyword
-    if state:
-        filters["state"] = state
-    if enterprise:
-        filters["enterprise"] = enterprise
-    data = api.search_jobs(**filters)
+    filters = api.applying_filters(limit=limit, type_employee=type_employee, city=city, keyword=keyword, state=state, enterprise=enterprise)
+        
+    with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
+        data = api.search_jobs(**filters)
+    
     all_jobs = data["data"]
-
+    
     table = Table()
-    table.add_column("Empresa")
-    table.add_column("Cargo")
-    table.add_column("Cidade")
-    table.add_column("Estado")
-    table.add_column("URL")
-    table.add_column("Publicado em")
+    columns = ["Empresa", "Cargo", "Cidade", "Estado", "URL", "Publicado em"]
+    for column in columns:
+        table.add_column(column)
 
     for job in all_jobs:
         raw_date = job.get("publishedDate")
@@ -133,20 +151,22 @@ def search(
         )
     console.print(table)
     
+    command = "jobs-cli " + " ".join(shlex.quote(arg) for arg in sys.argv[1:])
+    save_history(command)
+    
     if output:
         saved_path = _save_to_txt(all_jobs, output)
         tableOutput = Table()
 
-        tableOutput.add_column("Descrição")
-        tableOutput.add_column("Caminho Relativo")
-        tableOutput.add_column("Arquivo")
-
+        columns_output = ["Descrição", "Caminho Relativo", "Arquivo"]
+        for column in columns_output:
+            tableOutput.add_column(column)
+            
         tableOutput.add_row(
             "Resultados salvos com sucesso",
             str(saved_path.relative_to(Path.cwd())) if saved_path.is_relative_to(Path.cwd()) else str(saved_path),
             saved_path.name,
         )
-
         console.print(tableOutput)
 
 def _save_to_txt(jobs: list[dict], filename: str) -> Path:

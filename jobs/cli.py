@@ -1,9 +1,10 @@
-from jobs.utils.history import create_tables, save_history, all_commands
-from jobs.utils.types import JobType, TYPE_MAP, KeywordsType
-from jobs.utils.history import create_tables
-from jobs.utils.parser import load_keywords
-from jobs.utils.matcher import calculate_match
-from jobs.utils.providers import GupyAPI
+from jobs.core.columns import HISTORY_COLUMNS, SEARCH_COLUMNS, MATCH_COLUMNS, OUTPUT_COLUMNS
+from jobs.core.history import create_tables, save_history, all_commands
+from jobs.core.types import JobType, TYPE_MAP, KeywordsType
+from jobs.core.history import create_tables
+from jobs.core.parser import load_keywords, save_to_txt
+from jobs.core.matcher import calculate_match
+from jobs.core.providers import GupyAPI
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
@@ -29,8 +30,9 @@ def history(limit: int = typer.Option(10, "--limit", "-l", help="Número de coma
         return
 
     table = Table()
-    table.add_column("Data e Hora", style="cyan", no_wrap=True)
-    table.add_column("Comando", style="white")
+
+    for column in HISTORY_COLUMNS:
+        table.add_column(column.get("name"), style=column.get("style"), no_wrap=column.get("no_wrap"))
 
     for command, created_at in commands[-limit:]:
         table.add_row(str(created_at), command)
@@ -75,20 +77,12 @@ def match(
             "job": job,
         })
     
-    results.sort(
-        key=lambda item: item["score"],
-        reverse=True,
-    )
+    results.sort(key=lambda item: item["score"], reverse=True)
     
     table = Table()
 
-    table.add_column("Porcentual")
-    table.add_column("Empresa")
-    table.add_column("Cargo")
-    table.add_column("Cidade")
-    table.add_column("Estado")
-    table.add_column("URL")
-    table.add_column("Palavras")
+    for column in MATCH_COLUMNS:
+        table.add_column(column)
     
     command = "jobs-cli " + " ".join(shlex.quote(arg) for arg in sys.argv[1:])
     save_history(command)
@@ -129,8 +123,7 @@ def search(
     all_jobs = data["data"]
     
     table = Table()
-    columns = ["Empresa", "Cargo", "Cidade", "Estado", "URL", "Publicado em"]
-    for column in columns:
+    for column in SEARCH_COLUMNS:
         table.add_column(column)
 
     for job in all_jobs:
@@ -155,11 +148,10 @@ def search(
     save_history(command)
     
     if output:
-        saved_path = _save_to_txt(all_jobs, output)
+        saved_path = save_to_txt(all_jobs, output, DATA_DIR)
         tableOutput = Table()
 
-        columns_output = ["Descrição", "Caminho Relativo", "Arquivo"]
-        for column in columns_output:
+        for column in OUTPUT_COLUMNS:
             tableOutput.add_column(column)
             
         tableOutput.add_row(
@@ -168,25 +160,6 @@ def search(
             saved_path.name,
         )
         console.print(tableOutput)
-
-def _save_to_txt(jobs: list[dict], filename: str) -> Path:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-
-    lines = []
-    for job in jobs:
-        lines.append(
-            f"Empresa: {job['careerPageName']}\n"
-            f"Cargo: {job['name']}\n"
-            f"Cidade: {job['city']}\n"
-            f"URL: {job['jobUrl']}\n"
-            + "-" * 40
-        )
-
-    content = "\n".join(lines) if lines else "Nenhuma vaga encontrada."
-
-    file_path = DATA_DIR / filename
-    file_path.write_text(content, encoding="utf-8")
-    return file_path
 
 if __name__ == "__main__":
     app()

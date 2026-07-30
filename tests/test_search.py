@@ -1,5 +1,5 @@
 from typer.testing import CliRunner
-from jobs.core import app
+from jobs.cli import app
 from jobs.core.providers import GupyAPI
 
 runner = CliRunner()

@@ -14,6 +14,7 @@
 ### 1.1. Informações Gerais
 - CLI em Python para buscar vagas de emprego diretamente pelo terminal, consumindo a API da Gupy.
 - Projeto de cunho acadêmico e open-source, com o objetivo de ajudar a comunidade a filtrar e encontrar oportunidades de emprego com mais facilidade.
+- **Documentação oficial:** [techabraao.github.io/jobs/](https://techabraao.github.io/jobs/)
 
 ### 1.2. Tecnologias
 - Python

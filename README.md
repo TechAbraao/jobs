@@ -40,7 +40,7 @@ jobs-cli search [OPTIONS]
 | `--keyword` | `-k` | `str` | `None` | Palavra-chave para buscar no título e na descrição das vagas. |
 | `--type` | `-t` | `str` | `Efetivo` | Tipo de vaga a ser filtrada. Opções: `Efetivo`, `Estágio`, `Jovem Aprendiz`. |
 | `--state` | `-s` | `str` | `None` | Filtra vagas por estado. |
-| `--output` | `-o` | `str` | `None` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/`). |
+| `--output` | `-o` | `str` | `None` | Nome do arquivo `.txt` para salvar os resultados (salvo em `jobs/data/archives`). |
 | `--enterprise` | `-e` | `str` | `None` | Filtra vagas por empresa. |
 - Busca padrão
 
@@ -307,7 +307,7 @@ $ jobs-cli search --help
 │ --keyword     -k      <str>                             Palavra-chave para buscar no título e na descrição das vagas.                                                                                                                      │
 │ --state       -s      <str>                             Filtra vagas por estado.                                                                                                                                                           │
 │ --type        -t      <Efetivo|Estágio|Jovem Aprendiz>  Tipo de vaga a ser filtrada. [default: Efetivo]                                                                                                                                    │
-│ --output      -o      <str>                             Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/).                                                                                                              │
+│ --output      -o      <str>                             Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/archives).                                                                                                              │
 │ --enterprise  -e      <str>                             Filtra vagas por empresa.                                                                                                                                                          │
 │ --help                                                  Show this message and exit.                                                                                                                                                        │
 ╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯

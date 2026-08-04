@@ -15,7 +15,7 @@ import sys
 
 app = typer.Typer()
 console = Console()
-DATA_DIR = Path(__file__).resolve().parent / "data"
+DATA_DIR = Path(__file__).resolve().parent / "data" / "archives"
 
 @app.callback()
 def main():
@@ -110,7 +110,7 @@ def search(
     keyword: str = typer.Option(None, "--keyword", "-k", help="Palavra-chave para buscar no título e na descrição das vagas."),
     state: str = typer.Option(None, "--state", "-s", help="Filtra vagas por estado."),
     type: JobType = typer.Option(JobType.efetivo, "--type", "-t", help="Tipo de vaga a ser filtrada."),
-    output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/)."),
+    output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/archives)."),
     enterprise: str = typer.Option(None, "--enterprise", "-e", help="Filtra vagas por empresa."),
 ):
     api = GupyAPI()
@@ -160,6 +160,3 @@ def search(
             saved_path.name,
         )
         console.print(tableOutput)
-
-if __name__ == "__main__":
-    app()

@@ -178,8 +178,8 @@ logs/
 *.log
 /logs/
 jobs/data/*.txt
+jobs/data/archives/*.txt
 jobs/data/*.db
-
 
 # Ignore KEYWORDS.md
 KEYWORDS.md

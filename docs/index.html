@@ -1,254 +1,521 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>jobs-cli</title>
-<style>
-  :root {
-    --bg: #ffffff;
-    --text: #1a1a1a;
-    --muted: #666666;
-    --line: #e2e2e2;
-    --code-bg: #f5f5f5;
-    --accent: #2f6f4f;
-    --error: #b23a2e;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  * { box-sizing: border-box; }
+  <link rel="stylesheet" href="styles/index.css">
 
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-  }
-
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 56px 20px 80px;
-  }
-
-  h1 {
-    font-size: 32px;
-    margin: 0 0 8px;
-  }
-
-  .subtitle {
-    color: var(--muted);
-    margin: 0 0 8px;
-    font-size: 16px;
-  }
-
-  .ref {
-    font-size: 14px;
-    margin: 0 0 40px;
-  }
-  .ref a { color: var(--accent); }
-
-  h2 {
-    font-size: 20px;
-    margin: 48px 0 4px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .section-note {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 8px 0 20px;
-  }
-
-  h3 {
-    font-size: 15px;
-    margin: 24px 0 6px;
-  }
-
-  .desc {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0 0 8px;
-  }
-
-  code {
-    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-    font-size: 13px;
-    background: var(--code-bg);
-    padding: 2px 5px;
-    border-radius: 3px;
-  }
-
-  pre {
-    background: var(--code-bg);
-    padding: 12px 16px;
-    border-radius: 6px;
-    overflow-x: auto;
-    margin: 0 0 4px;
-  }
-
-  pre code {
-    background: none;
-    padding: 0;
-    font-size: 13px;
-    line-height: 1.6;
-  }
-
-  pre.error {
-    background: #fbecea;
-  }
-  pre.error code {
-    color: var(--error);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin: 8px 0 16px;
-  }
-
-  th, td {
-    text-align: left;
-    padding: 8px 10px;
-    border-bottom: 1px solid var(--line);
-    vertical-align: top;
-  }
-
-  th {
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 13px;
-  }
-
-  a { color: var(--accent); }
-
-  footer {
-    margin-top: 56px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 13px;
-  }
-</style>
+  <title>Jobs CLI · Documentação</title>
 </head>
+
 <body>
-<div class="wrap">
 
-  <h1>jobs-cli</h1>
-  <p class="subtitle">Exemplos de uso do comando <code>search</code> (CLI para buscar vagas na Gupy direto do terminal).</p>
-  <p class="ref">Opções disponíveis: <code>--city</code>, <code>--limit</code>, <code>--keyword</code>, <code>--type</code> · veja a <a href="#referencia">tabela completa</a> no fim da página.</p>
+  <div class="wrap">
 
-  <h2>Busca básica</h2>
+    <header>
+      <h1>Jobs CLI</h1>
 
-  <h3>Busca padrão</h3>
-  <pre><code>jobs-cli search</code></pre>
+      <p class="subtitle">
+        CLI para buscar e analisar vagas da Gupy diretamente pelo terminal.
+      </p>
 
-  <h3>Trazer mais resultados</h3>
-  <pre><code>jobs-cli search --limit=30</code></pre>
+    </header>
 
-  <h3>Trazer só o essencial</h3>
-  <pre><code>jobs-cli search --limit=3</code></pre>
+    <nav class="tabs">
 
+      <section>
+        <button class="tab active" onclick="openTab('search')">
+          search
+        </button>
 
-  <h2>Por cidade</h2>
+        <button class="tab" onclick="openTab('match')">
+          match
+        </button>
 
-  <h3>Rio de Janeiro</h3>
-  <pre><code>jobs-cli search --city="Rio de Janeiro"</code></pre>
+        <button class="tab" onclick="openTab('history')">
+          history
+        </button>
+      </section>
 
-  <h3>Belo Horizonte</h3>
-  <pre><code>jobs-cli search --city="Belo Horizonte"</code></pre>
+      <small>v0.4.0</small>
 
-  <h3>Recife</h3>
-  <pre><code>jobs-cli search --city="Recife"</code></pre>
-
-  <h3>Porto Alegre, com mais resultados</h3>
-  <pre><code>jobs-cli search --city="Porto Alegre" --limit=20</code></pre>
-
-
-  <h2>Por tipo de vaga</h2>
-
-  <h3>Estágio</h3>
-  <pre><code>jobs-cli search --type="Estágio"</code></pre>
-
-  <h3>Jovem Aprendiz</h3>
-  <pre><code>jobs-cli search --type="Jovem Aprendiz"</code></pre>
-
-  <h3>Efetivo</h3>
-  <pre><code>jobs-cli search --type="Efetivo"</code></pre>
+    </nav>
 
 
-  <h2>Por palavra-chave</h2>
+    <section id="search" class="tab-content active">
 
-  <h3>Vagas de dados</h3>
-  <pre><code>jobs-cli search --keyword="Dados"</code></pre>
+      <h2>jobs-cli search [OPTIONS]</h2>
 
-  <h3>Vagas de suporte</h3>
-  <pre><code>jobs-cli search --keyword="Suporte"</code></pre>
+      <p class="ref">
+        Busca vagas de emprego na plataforma Gupy com filtros de cidade, tipo de contrato e palavra-chave.
+      </p>
 
-  <h3>Vagas de design</h3>
-  <pre><code>jobs-cli search --keyword="Design"</code></pre>
+      <h3 class="">Referência de opções</h3>
 
-  <h3>Cargo específico</h3>
-  <pre><code>jobs-cli search --keyword="Desenvolvedor Python"</code></pre>
+      <table>
+
+        <thead>
+          <tr>
+            <th>Opção</th>
+            <th>Atalho</th>
+            <th>Tipo</th>
+            <th>Padrão</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><code>--city</code></td>
+            <td><code>-c</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Filtra vagas por cidade.</td>
+          </tr>
+
+          <tr>
+            <td><code>--limit</code></td>
+            <td><code>-l</code></td>
+            <td>int</td>
+            <td>10</td>
+            <td>Quantidade de resultados retornados.</td>
+          </tr>
+
+          <tr>
+            <td><code>--keyword</code></td>
+            <td><code>-k</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Busca no título e descrição das vagas.</td>
+          </tr>
+
+          <tr>
+            <td><code>--state</code></td>
+            <td><code>-s</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Filtra vagas por estado.</td>
+          </tr>
+
+          <tr>
+            <td><code>--type</code></td>
+            <td><code>-t</code></td>
+            <td>str</td>
+            <td>Efetivo</td>
+            <td>
+              Tipo de vaga: Efetivo, Estágio e Jovem Aprendiz.
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>--output</code></td>
+            <td><code>-o</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>
+              Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/archives).
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>--enterprise</code></td>
+            <td><code>-e</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>
+              Filtra vagas por empresa.
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <h3>Armazenamento Local</h3>
+
+      <p>
+        Os arquivos <code>.txt</code> das ocorrências de vagas são armazenados por padrão em:
+      </p>
+
+      <pre><code>jobs/data/archives/[NOME].txt</code></pre>
+
+      <br>
+      <hr>
+
+      <h2>1. Busca básica</h2>
+      <p>
+        Para aumentar a quantidade de vagas retornadas, utilize a opção
+        <code>--limit</code> (ou sua forma abreviada <code>-l</code>).
+      </p>
+
+      <h3>1.1. Flags disponíveis</h3>
+
+      <pre><code>jobs-cli search --help</code></pre>
+
+      <h3>1.2. Busca padrão</h3>
+
+      <pre><code>jobs-cli search</code></pre>
 
 
-  <h2>Combinando filtros</h2>
-
-  <h3>Estágio em tecnologia no Rio de Janeiro</h3>
-  <pre><code>jobs-cli search --city="Rio de Janeiro" --type="Estágio" --keyword="Tecnologia"</code></pre>
-
-  <h3>Jovem aprendiz em São Paulo, poucos resultados</h3>
-  <pre><code>jobs-cli search --type="Jovem Aprendiz" --limit=5</code></pre>
-
-  <h3>Vagas de dados efetivas em Belo Horizonte</h3>
-  <pre><code>jobs-cli search --city="Belo Horizonte" --keyword="Dados" --type="Efetivo" --limit=15</code></pre>
+      <h3>1.3. Trazer mais resultados</h3>
 
 
-  <h2>Erros comuns</h2>
-  <p class="section-note">O <code>--type</code> valida o valor antes de rodar a busca.</p>
+      <pre><code>jobs-cli search --limit=30</code></pre>
 
-  <h3>Tipo inválido</h3>
-  <pre><code>jobs-cli search --type="CLT"</code></pre>
-  <pre class="error"><code>Error: Invalid value for '--type': 'CLT' is not one of 'Efetivo', 'Estágio', 'Estagiário', 'Jovem Aprendiz'.</code></pre>
+      <p>Forma abreviada:</p>
 
-  <h3>Cidade com espaço, sem aspas</h3>
-  <pre><code>jobs-cli search --city=São Paulo</code></pre>
-  <pre class="error"><code>Error: Got unexpected extra argument (Paulo)</code></pre>
-  <p class="desc">Sempre envolva nomes com espaço em aspas: <code>--city="São Paulo"</code>.</p>
+      <pre><code>jobs-cli search -l 30</code></pre>
+
+      <h3>1.4. Trazer poucos resultados</h3>
+
+      <pre><code>jobs-cli search --limit=3</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -l 3</code></pre>
+
+      <h2>2. Por cidade</h2>
+      <p>
+        Para filtrar por cidades específicas, utilize a opção
+        <code>--city</code> (ou sua forma abreviada <code>-c</code>).
+      </p>
+
+      <h3>2.1. Rio de Janeiro</h3>
 
 
-  <h2 id="referencia">Referência de opções</h2>
-  <table>
-    <thead>
-      <tr><th>Opção</th><th>Tipo</th><th>Padrão</th><th>Descrição</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><code>--city</code></td><td>str</td><td>São Paulo</td>
-        <td>Filtra vagas por cidade.</td>
-      </tr>
-      <tr>
-        <td><code>--limit</code></td><td>int</td><td>10</td>
-        <td>Quantidade de resultados retornados.</td>
-      </tr>
-      <tr>
-        <td><code>--keyword</code></td><td>str</td><td>N/A</td>
-        <td>Palavra-chave para buscar no título e na descrição das vagas.</td>
-      </tr>
-      <tr>
-        <td><code>--type</code></td><td>str</td><td>Efetivo</td>
-        <td>Tipo de vaga: Efetivo, Estágio / Estagiário, Jovem Aprendiz.</td>
-      </tr>
-    </tbody>
-  </table>
+      <pre><code>jobs-cli search --city="Rio de Janeiro"</code></pre>
 
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -c "Rio de Janeiro"</code></pre>
+
+      <h3>2.2. Belo Horizonte</h3>
+
+      <pre><code>jobs-cli search --city="Belo Horizonte"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -c "Belo Horizonte"</code></pre>
+
+
+      <h3>2.3. Recife</h3>
+
+      <pre><code>jobs-cli search --city="Recife"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -C "Recife"</code></pre>
+
+      <h3>2.4. Porto Alegre com mais resultados</h3>
+
+      <pre><code>jobs-cli search --city="Porto Alegre" --limit=20</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -c "Porto Alegre" -l 20</code></pre>
+
+      <h2>3. Por tipo de vaga</h2>
+      <p>
+        Para filtrar por tipos de vagas, utilize a opção
+        <code>--type</code> (ou sua forma abreviada <code>-t</code>).
+      </p>
+
+      <h3>3.1 Estágio</h3>
+
+
+      <pre><code>jobs-cli search --type="Estágio"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -t "Estágio"</code></pre>
+
+      <h3>3.2. Jovem Aprendiz</h3>
+
+      <pre><code>jobs-cli search --type="Jovem Aprendiz"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -t "Jovem Aprendiz"</code></pre>
+
+      <h3>3.3. Efetivo</h3>
+
+      <pre><code>jobs-cli search --type="Efetivo"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -t "Efetivo"</code></pre>
+
+      <h2>4. Por palavra-chave</h2>
+      <p>
+        Para filtrar por palavra-chave, utilize a opção
+        <code>--keyword</code> (ou sua forma abreviada <code>-k</code>).
+      </p>
+
+
+      <h3>4.1 Vagas de dados</h3>
+
+      <pre><code>jobs-cli search --keyword="Dados"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -k "Dados"</code></pre>
+
+      <h3>4.2. Vagas de suporte</h3>
+
+      <pre><code>jobs-cli search --keyword="Suporte"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -k "Suporte"</code></pre>
+
+
+      <h3>4.3. Cargo específico</h3>
+
+      <pre><code>jobs-cli search --keyword="Desenvolvedor Python"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -k "Desenvolvedor Python"</code></pre>
+
+      <h2>5. Combinando filtros</h2>
+
+      <h3>5.1. Estágio em tecnologia no Rio de Janeiro</h3>
+
+      <pre><code>jobs-cli search --city="Rio de Janeiro" --type="Estágio" --keyword="Tecnologia"</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -c "Rio de Janeiro" -t "Estágio" -k "Tecnologia"</code></pre>
+
+      <h3>5.2. Vagas de dados efetivas em Belo Horizonte</h3>
+
+      <pre><code>jobs-cli search --city="Belo Horizonte" --keyword="Dados" --type="Efetivo" --limit=15</code></pre>
+
+      <p>Forma abreviada:</p>
+
+      <pre><code>jobs-cli search -c "Belo Horizonte" -k "Dados" -t "Efetivo" -l 15</code></pre>
+
+      <h2>6. Salvando as ocorrências em um arquivo .txt</h2>
+
+      <h3>6.1. Salvando ocorrências de vagas na cidade de São Paulo com a palavra-chave Python</h3>
+
+      <pre><code>jobs-cli search -c "São Paulo" -k "Python" -o Vagas.txt</code></pre>
+
+    </section>
+
+    <section id="match" class="tab-content">
+
+      <h2>jobs-cli match [OPTIONS]</h2>
+
+      <p class="ref">
+        Busca vagas de emprego na plataforma Gupy utilizando os filtros disponíveis e calcula a porcentagem de
+        compatibilidade de cada vaga com as palavras-chave definidas pelo usuário no arquivo <code>KEYWORDS.md.</code>
+      </p>
+
+      <h3 class="">Referência de opções</h3>
+      <table>
+
+        <thead>
+          <tr>
+            <th>Opção</th>
+            <th>Atalho</th>
+            <th>Tipo</th>
+            <th>Padrão</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><code>--file</code></td>
+            <td><code>-f</code></td>
+            <td>KEYWORDS.md</td>
+            <td>KEYWORDS.md</td>
+            <td>Arquivo de palavras-chave.</td>
+          </tr>
+
+          <tr>
+            <td><code>--keyword</code></td>
+            <td><code>-k</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Busca no título e descrição das vagas.</td>
+          </tr>
+
+          <tr>
+            <td><code>--limit</code></td>
+            <td><code>-l</code></td>
+            <td>int</td>
+            <td>10</td>
+            <td>Quantidade de resultados retornados.</td>
+          </tr>
+
+          <tr>
+            <td><code>--enterprise</code></td>
+            <td><code>-e</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>
+              Filtra vagas por empresa.
+            </td>
+          </tr>
+
+          <tr>
+            <td><code>--state</code></td>
+            <td><code>-s</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Filtra vagas por estado.</td>
+          </tr>
+
+          <tr>
+            <td><code>--city</code></td>
+            <td><code>-c</code></td>
+            <td>str</td>
+            <td>N/A</td>
+            <td>Filtra vagas por cidade.</td>
+          </tr>
+
+
+        </tbody>
+
+      </table>
+
+      <h3>Definir palavras-chave</h3>
+
+      <p>
+        Para utilizar o comando <code>match,</code> renomeie o arquivo <code>KEYWORDS_TEMPLATE.md</code> para
+        <code>KEYWORDS.md.</code> O arquivo está localizado na raiz do projeto e deve permanecer nesse diretório. Em
+        seguida, preencha-o com as palavras-chave que representam seus conhecimentos, tecnologias ou competências de
+        interesse. Utilize o modelo abaixo como referência:
+      </p>
+      <pre><code>Python
+Java
+Flask
+FastAPI
+Spring Boot
+AWS
+Amazon Web Services
+Docker
+Linux
+Bash Script</code></pre>
+
+
+      <br>
+      <hr>
+
+      <h2>1. Comandos básicos</h2>
+
+      <h3>1.1. Flags disponíveis</h3>
+      <pre><code>jobs-cli match --help</code></pre>
+
+
+      <h3>1.2. Buscar vagas no estado de São Paulo pela palavra-chave Java com cálculo de compatibilidade.</h3>
+      <pre><code>jobs-cli match -f KEYWORDS.md -s "São Paulo" -l 15 -k "Java"</code></pre>
+
+      <h3>1.3. Buscar vagas no estado do Rio de Janeiro pela palavra-chave AWS com cálculo de compatibilidade.</h3>
+      <pre><code>jobs-cli match -f KEYWORDS.md -s "Rio de Janeiro" -l 10 -k "AWS"</code></pre>
+
+      <h3>1.4. Buscar vagas na cidade de São Paulo com cálculo de compatibilidade e palavra-chave Python.</h3>
+      <pre><code>jobs-cli match -f KEYWORDS.md -k "Python" -c "São Paulo"</code></pre>
+
+    </section>
+
+    <section id="history" class="tab-content">
+
+      <h2>jobs-cli history [OPTIONS]</h2>
+
+      <p class="ref">
+        Permite visualizar o histórico de comandos utilizados, com a opção de limitar a quantidade exibida.
+      </p>
+
+      <h3 class="">Referência de opções</h3>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Opção</th>
+            <th>Atalho</th>
+            <th>Tipo</th>
+            <th>Padrão</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><code>--limit</code></td>
+            <td><code>-l</code></td>
+            <td>int</td>
+            <td>10</td>
+            <td>Número de comandos a exibir.</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <h3>Armazenamento Local</h3>
+
+      <p>
+        O histórico é armazenado localmente utilizando SQLite.
+      </p>
+
+      <pre><code>jobs/data/jobs.db</code></pre>
+
+      <br>
+      <hr>
+
+      <h2>1. Comandos básicos</h2>
+
+      <h3>1.1. Flags disponíveis</h3>
+      <pre><code>jobs-cli history --help</code></pre>
+
+
+      <h3>1.2. Visualizar histórico</h3>
+      <pre><code>jobs-cli history</code></pre>
+
+      <h3>1.3. Visualizar histórico limitando a quantidade na saída</h3>
+      <pre><code>jobs-cli history --limit=30</code></pre>
+
+    </section>
+
+  </div>
   <footer>
-    jobs-cli · projeto acadêmico e open-source ·
-    <a href="https://github.com/TechAbraao/jobs">github.com/TechAbraao/jobs</a>
+    <h3>Jobs CLI · Projeto acadêmico e open-source</h3>
+
+    <a href="https://github.com/TechAbraao/jobs">
+      github.com/TechAbraao/jobs
+    </a>
   </footer>
 
-</div>
+  <script>
+
+    function openTab(tabName) {
+
+      const contents = document.querySelectorAll(".tab-content");
+      const tabs = document.querySelectorAll(".tab");
+
+      contents.forEach(content => {
+        content.classList.remove("active");
+      });
+
+      tabs.forEach(tab => {
+        tab.classList.remove("active");
+      });
+
+      document.getElementById(tabName).classList.add("active");
+
+      event.currentTarget.classList.add("active");
+    }
+
+  </script>
 </body>
+
 </html>

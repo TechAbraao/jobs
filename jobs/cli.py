@@ -87,6 +87,9 @@ def match(
     command = "jobs-cli " + " ".join(shlex.quote(arg) for arg in sys.argv[1:])
     save_history(command)
     
+    command = "jobs-cli " + " ".join(shlex.quote(arg) for arg in sys.argv[1:])
+    save_history(command)
+    
     for result in results:
 
         job = result["job"]

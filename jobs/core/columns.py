@@ -11,6 +11,6 @@ HISTORY_COLUMNS = [{
 
 MATCH_COLUMNS = ["Porcentual", "Empresa", "Cargo", "Cidade", "Estado", "URL", "Palavras"]
 
-SEARCH_COLUMNS = ["Empresa", "Cargo", "Cidade", "Estado", "URL", "Publicado em"]
+SEARCH_COLUMNS = ["Empresa", "Cargo", "Cidade", "Estado", "URL", "Modelo de Trabalho", "Publicado em"]
 
 OUTPUT_COLUMNS = ["Descrição", "Caminho Relativo", "Arquivo"]

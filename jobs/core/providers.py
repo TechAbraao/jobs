@@ -12,6 +12,7 @@ class GupyAPI:
                     keyword: Optional[str] = None,
                     state: Optional[str] = None,
                     enterprise: Optional[str] = None,
+                    model_work: Optional[bool]= None
                 ):
         
         params = {"limit": limit}
@@ -26,6 +27,8 @@ class GupyAPI:
             params["term"] = keyword
         if enterprise:
             params["careerPageName"] = enterprise
+        if model_work:
+            params["isRemoteWork"] = model_work
 
         response = httpx.get(
             f"{self._BASE_URL}/jobs",
@@ -42,7 +45,8 @@ class GupyAPI:
             city: str,
             keyword: str,
             state: str,
-            enterprise: str
+            enterprise: str,
+            model_work: bool
         ):
         filters = {"limit": limit, "type": type_employee}
         
@@ -54,5 +58,7 @@ class GupyAPI:
             filters["state"] = state
         if enterprise:
             filters["enterprise"] = enterprise
+        if model_work:
+            filters["model_work"] = model_work
             
         return filters

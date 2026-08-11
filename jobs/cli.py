@@ -1,6 +1,7 @@
 from jobs.core.columns import HISTORY_COLUMNS, SEARCH_COLUMNS, MATCH_COLUMNS, OUTPUT_COLUMNS
 from jobs.core.history import create_tables, save_history, all_commands
 from jobs.core.types import JobType, TYPE_MAP, KeywordsType
+from jobs.core.validators import safe_value
 from jobs.core.history import create_tables
 from jobs.core.parser import load_keywords, save_to_txt
 from jobs.core.matcher import calculate_match
@@ -115,10 +116,19 @@ def search(
     type: JobType = typer.Option(JobType.efetivo, "--type", "-t", help="Tipo de vaga a ser filtrada."),
     output: str = typer.Option(None, "--output", "-o", help="Nome do arquivo .txt para salvar os resultados (salvo em jobs/data/archives)."),
     enterprise: str = typer.Option(None, "--enterprise", "-e", help="Filtra vagas por empresa."),
+    model_work: bool = typer.Option(None, "--remote", "-r", help="Aplicar filtro para vagas remotas.")
 ):
     api = GupyAPI()
     type_employee = TYPE_MAP[type]
-    filters = api.applying_filters(limit=limit, type_employee=type_employee, city=city, keyword=keyword, state=state, enterprise=enterprise)
+
+    filters = api.applying_filters(
+        limit=limit, 
+        type_employee=type_employee, 
+        city=city, keyword=keyword, 
+        state=state, 
+        enterprise=enterprise, 
+        model_work=(True if model_work else False)
+    )
         
     with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
         data = api.search_jobs(**filters)
@@ -137,12 +147,16 @@ def search(
         else:
             format_date = "N/A"
 
+        is_remote_work = job.get("isRemoteWork")
+        remote_work = ("Remoto" if is_remote_work == True else "Presencial")
+
         table.add_row(
             job["careerPageName"],
             job["name"],
-            job["city"],
-            job["state"],
+            safe_value(job["city"]),
+            safe_value(job["state"]),
             f"[link={job['jobUrl']}]Abrir Vaga[/link]",
+            remote_work,
             format_date,
         )
     console.print(table)

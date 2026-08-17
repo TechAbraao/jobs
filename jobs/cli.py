@@ -177,3 +177,7 @@ def search(
             saved_path.name,
         )
         console.print(tableOutput)
+
+@app.command()
+def configs():
+    pass

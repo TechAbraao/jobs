@@ -15,7 +15,7 @@ class GupyAPI:
                     model_work: Optional[bool]= None
                 ):
         
-        params = {"limit": limit}
+        params = {"limit": limit}   
 
         if city:
             params["city"] = city

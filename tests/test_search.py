@@ -1,7 +1,7 @@
 import jobs.cli as cli_module
 from typer.testing import CliRunner
 from jobs.cli import app
-from jobs.core.providers import GupyAPI
+from jobs.core.providers import GupyAPI, GupyAPIError
 
 runner = CliRunner()
 
@@ -54,3 +54,17 @@ def test_search_saves_output_file(mocker, monkeypatch, tmp_path):
     assert (archive_dir / "resultados.txt").exists()
     assert "Resultados salvos com" in result.stdout
     assert "resultados.txt" in result.stdout
+
+
+def test_search_displays_safe_network_error(mocker):
+    mocker.patch.object(
+        GupyAPI,
+        "search_jobs",
+        side_effect=GupyAPIError("Não foi possível conectar à API da Gupy. Tente novamente."),
+    )
+
+    result = runner.invoke(app, ["search"])
+
+    assert result.exit_code == 1
+    assert "Não foi possível conectar à API da Gupy" in result.stdout
+    assert "Traceback" not in result.stdout

@@ -1,6 +1,11 @@
 from typing import Optional
 import httpx
 
+
+class GupyAPIError(Exception):
+    """Erro seguro e compreensível ao consultar a API da Gupy."""
+
+
 class GupyAPI:
     def __init__(self):
         self._BASE_URL = "https://employability-portal.gupy.io/api/v1"
@@ -30,13 +35,30 @@ class GupyAPI:
         if model_work:
             params["isRemoteWork"] = model_work
 
-        response = httpx.get(
-            f"{self._BASE_URL}/jobs",
-            params=params,
-            timeout=20
-        )
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = httpx.get(
+                f"{self._BASE_URL}/jobs",
+                params=params,
+                timeout=20
+            )
+            response.raise_for_status()
+            return response.json()
+        except httpx.TimeoutException:
+            raise GupyAPIError(
+                "A busca na Gupy excedeu o tempo limite. Tente novamente."
+            ) from None
+        except httpx.HTTPStatusError as error:
+            raise GupyAPIError(
+                f"A Gupy retornou um erro HTTP ({error.response.status_code}). Tente novamente mais tarde."
+            ) from None
+        except httpx.RequestError:
+            raise GupyAPIError(
+                "Não foi possível conectar à API da Gupy. Verifique sua conexão e tente novamente."
+            ) from None
+        except ValueError:
+            raise GupyAPIError(
+                "A API da Gupy retornou uma resposta inválida. Tente novamente mais tarde."
+            ) from None
     
     def applying_filters(
             self, 

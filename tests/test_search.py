@@ -20,6 +20,8 @@ def test_search_returns_job(mocker):
         ]
     }
 
+    archive_dir = tmp_path / "archives"
+    monkeypatch.setattr(cli_module, "DATA_DIR", archive_dir)
     mocker.patch.object(GupyAPI, "search_jobs", return_value=fake_data)
 
     result = runner.invoke(app, ["search", "--limit", "1"])

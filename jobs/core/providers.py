@@ -8,7 +8,7 @@ class GupyAPIError(Exception):
 
 class GupyAPI:
     def __init__(self):
-        self._BASE_URL = "https://employability-portal.gupy.io/api/v1"
+        self._BASE_URL = "https://portal.gupy.io/api/job-search"
         
     def search_jobs(self, 
                     city: Optional[str] = None,

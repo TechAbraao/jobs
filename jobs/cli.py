@@ -5,7 +5,7 @@ from jobs.core.validators import safe_value
 from jobs.core.history import create_tables
 from jobs.core.parser import load_keywords, save_to_txt
 from jobs.core.matcher import calculate_match
-from jobs.core.providers import GupyAPI
+from jobs.core.providers import GupyAPI, GupyAPIError
 from rich.console import Console
 from rich.table import Table
 from datetime import datetime
@@ -17,6 +17,15 @@ import sys
 app = typer.Typer()
 console = Console()
 DATA_DIR = Path(__file__).resolve().parent / "data" / "archives"
+
+
+def _search_jobs(api, **filters):
+    try:
+        return api.search_jobs(**filters)
+    except GupyAPIError as error:
+        console.print(f"[red]{error}[/red]")
+        raise typer.Exit(code=1) from None
+
 
 @app.callback()
 def main():
@@ -65,7 +74,7 @@ def match(
         filters["state"] = state    
     
     with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
-        data = api.search_jobs(**filters)
+        data = _search_jobs(api, **filters)
     
     jobs = data["data"]
     results = []
@@ -131,7 +140,7 @@ def search(
     )
         
     with console.status("[bold green]Buscando vagas[/bold green]\n", spinner="dots"):
-        data = api.search_jobs(**filters)
+            data = _search_jobs(api, **filters)
     
     all_jobs = data["data"]
     

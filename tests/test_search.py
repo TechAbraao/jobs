@@ -6,7 +6,7 @@ from jobs.core.providers import GupyAPI, GupyAPIError
 runner = CliRunner()
 
 
-def test_search_returns_job(mocker):
+def test_search_returns_job(mocker, monkeypatch, tmp_path):
     fake_data = {
         "data": [
             {
@@ -24,9 +24,13 @@ def test_search_returns_job(mocker):
     monkeypatch.setattr(cli_module, "DATA_DIR", archive_dir)
     mocker.patch.object(GupyAPI, "search_jobs", return_value=fake_data)
 
-    result = runner.invoke(app, ["search", "--limit", "1"])
+    result = runner.invoke(
+        app,
+        ["search", "--limit", "1"],
+        env={"COLUMNS": "200"},   
+    )
 
-    assert result.exit_code == 0
+    assert result.exit_code == 0, result.output
     assert "Acme" in result.stdout
     assert "Python" in result.stdout
     assert "São" in result.stdout
